@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бизнес-калькулятор v15</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding: 20px; margin: 0; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 550px; box-sizing: border-box; }
+        h2 { color: #1a73e8; text-align: center; margin-top: 0; }
+        
+        .header-row { display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #1a73e8; padding: 5px 10px; margin-top: 20px; background: #f8f9fa; }
+        h3 { font-size: 18px; color: #333; margin: 0; }
+        
+        .section { margin-bottom: 15px; }
+        label { display: block; margin: 12px 0 4px; font-size: 13px; color: #666; }
+        
+        input { 
+            width: 100%; 
+            height: 40px; 
+            padding: 0 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 6px; 
+            box-sizing: border-box; 
+            font-size: 15px;
+            margin: 0;
+        }
+
+        /* Исправление рядов */
+        .custom-field { 
+            display: flex; 
+            gap: 8px; 
+            margin-top: 10px; 
+            align-items: flex-start; /* Выравнивание по верхней границе */
+            width: 100%; 
+        }
+        .name-col { flex: 7; } 
+        .amount-col { flex: 3; } 
+        
+        /* Исправление кнопок-плюсиков */
+        .add-btn { 
+            background: #1a73e8; 
+            color: white; 
+            border: none; 
+            border-radius: 50%; 
+            width: 32px; 
+            height: 32px; 
+            min-width: 32px; /* Чтобы не сжимался в овал */
+            aspect-ratio: 1 / 1; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 20px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 0;
+            line-height: 1;
+        }
+        
+        .btn-row { display: flex; gap: 10px; margin-top: 20px; }
+        .calc-btn { flex: 2; height: 50px; background-color: #27ae60; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        .clear-btn { flex: 1; height: 50px; background-color: #e74c3c; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        
+        /* Кнопка удаления */
+        .delete-btn { 
+            background: #fceaea; 
+            border: 1px solid #f5c2c2; 
+            color: #e74c3c; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            height: 40px; /* Такая же как у input */
+            min-width: 40px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .result { margin-top: 25px; padding: 20px; background-color: #fff; border: 2px solid #e9ecef; border-radius: 8px; display: none; }
+        .result p { margin: 10px 0; font-size: 16px; display: flex; justify-content: space-between; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
+        .profit-pos { color: #27ae60 !important; font-weight: bold; }
+        .profit-neg { color: #d93025 !important; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Бизнес-планировщик</h2>
+
+    <div class="header-row">
+        <h3>1. Единоразовые вложения</h3>
+        <button type="button" class="add-btn" onclick="addField('start-fields')">+</button>
+    </div>
+    <div id="start-fields" class="section">
+        <div class="input-group">
+            <label>Закупка товара для старта:</label>
+            <input type="number" class="start-val" placeholder="0">
+        </div>
+        <div class="input-group">
+            <label>Оборудование:</label>
+            <input type="number" class="start-val" placeholder="0">
+        </div>
+    </div>
+
+    <div class="header-row">
+        <h3>2. Ежемесячные расходы</h3>
+        <button type="button" class="add-btn" onclick="addField('monthly-fields')">+</button>
+    </div>
+    <div id="monthly-fields" class="section">
+        <div class="input-group">
+            <label>Аренда:</label>
+            <input type="number" class="monthly-val" placeholder="0">
+        </div>
+        <div class="input-group">
+            <label>Зарплаты:</label>
+            <input type="number" class="monthly-val" placeholder="0">
+        </div>
+    </div>
+
+    <div class="header-row">
+        <h3>3. Продажи</h3>
+    </div>
+    <div class="section" style="display: flex; gap: 10px; padding-top: 10px; align-items: flex-end;">
+        <div style="flex: 2;">
+            <label>Выручка в месяц:</label>
+            <input type="number" id="revenue" placeholder="0">
+        </div>
+        <div style="flex: 1;">
+            <label>Наценка (%):</label>
+            <input type="number" id="markup" value="25">
+        </div>
+    </div>
+
+    <div class="btn-row">
+        <button class="calc-btn" onclick="calculate()">Рассчитать</button>
+        <button class="clear-btn" onclick="clearInputsOnly()">Очистить цифры</button>
+    </div>
+
+    <div id="resultBox" class="result">
+        <p>Стартовые вложения: <span id="resTotalInvest">0 ₽</span></p>
+        <p>Вложено в товар (закупка): <span id="resCostPrice">0 ₽</span></p>
+        <p>Валовая прибыль: <span id="resGrossProfit">0 ₽</span></p>
+        <p>Ежемесячные расходы: <span id="resMonthlyOut">0 ₽</span></p>
+        <hr>
+        <p><strong>Чистая прибыль:</strong> <span id="resNetProfit">0 ₽</span></p>
+        <p style="border:none; font-size: 18px;"><strong>Окупаемость:</strong> <span id="resPayback">0</span></p>
+    </div>
+</div>
+
+<script>
+function addField(containerId) {
+    const container = document.getElementById(containerId);
+    const div = document.createElement('div');
+    div.className = 'custom-field dynamic-field';
+    const valClass = (containerId === 'start-fields') ? 'start-val' : 'monthly-val';
+    
+    div.innerHTML = `
+        <div class="name-col"><input type="text" placeholder="Название"></div>
+        <div class="amount-col"><input type="number" class="${valClass}" placeholder="0"></div>
+        <button type="button" class="delete-btn" onclick="this.parentElement.remove()">✕</button>
+    `;
+    container.appendChild(div);
+}
+
+function clearInputsOnly() {
+    document.querySelectorAll('.start-val, .monthly-val').forEach(input => input.value = '');
+    const rev = document.getElementById('revenue');
+    if (rev) rev.value = '';
+    document.getElementById('resultBox').style.display = 'none';
+}
+
+function calculate() {
+    let startSum = 0;
+    document.querySelectorAll('.start-val').forEach(i => startSum += parseFloat(i.value) || 0);
+
+    let monthlySum = 0;
+    document.querySelectorAll('.monthly-val').forEach(i => monthlySum += parseFloat(i.value) || 0);
+
+    const revenue = parseFloat(document.getElementById('revenue').value) || 0;
+    const markupPercent = parseFloat(document.getElementById('markup').value) || 0;
+    
+    const costPrice = revenue / (1 + (markupPercent / 100));
+    const grossProfit = revenue - costPrice;
+    const netProfit = grossProfit - monthlySum;
+
+    document.getElementById('resTotalInvest').innerText = Math.round(startSum).toLocaleString() + " ₽";
+    document.getElementById('resCostPrice').innerText = Math.round(costPrice).toLocaleString() + " ₽";
+    document.getElementById('resGrossProfit').innerText = Math.round(grossProfit).toLocaleString() + " ₽";
+    document.getElementById('resMonthlyOut').innerText = Math.round(monthlySum).toLocaleString() + " ₽";
+    
+    const nSpan = document.getElementById('resNetProfit');
+    nSpan.innerText = Math.round(netProfit).toLocaleString() + " ₽/мес.";
+    
+    const pSpan = document.getElementById('resPayback');
+    if (netProfit > 0) {
+        nSpan.className = "profit-pos";
+        pSpan.innerText = (startSum / netProfit).toFixed(1) + " мес.";
+        pSpan.className = "profit-pos";
+    } else {
+        nSpan.className = "profit-neg";
+        pSpan.innerText = "Убыток";
+        pSpan.className = "profit-neg";
+    }
+    document.getElementById('resultBox').style.display = 'block';
+}
+</script>
+
+</body>
+</html>
