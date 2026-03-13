@@ -3,235 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Бизнес-калькулятор v17</title>
+    <title>Бизнес-калькулятор v27</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding: 20px; margin: 0; }
-        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 550px; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding: 20px; margin: 0; }
+        .container { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); width: 100%; max-width: 600px; }
         h2 { color: #1a73e8; text-align: center; margin-top: 0; }
-        
-        .header-row { display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #1a73e8; padding: 5px 10px; margin-top: 20px; background: #f8f9fa; }
-        h3 { font-size: 18px; color: #333; margin: 0; }
-        
-        .section { margin-bottom: 15px; }
-        label { display: block; margin: 12px 0 4px; font-size: 13px; color: #666; }
-        
-        input { 
-            width: 100%; 
-            height: 40px; 
-            padding: 0 10px; 
-            border: 1px solid #ddd; 
-            border-radius: 6px; 
-            box-sizing: border-box; 
-            font-size: 15px;
-            margin: 0;
-        }
-
-        .input-group { margin-bottom: 10px; }
-
-        .custom-field { 
-            display: flex; 
-            gap: 8px; 
-            margin-top: 10px; 
-            align-items: center; 
-            width: 100%; 
-        }
-        .name-col { flex: 7; } 
-        .amount-col { flex: 3; } 
-        
-        .add-btn { 
-            background: #1a73e8; 
-            color: white; 
-            border: none; 
-            border-radius: 50%; 
-            width: 32px; 
-            height: 32px; 
-            min-width: 32px;
-            cursor: pointer; 
-            font-weight: bold; 
-            font-size: 24px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            padding: 0;
-            line-height: 1;
-        }
-        
-        .btn-row { display: flex; gap: 10px; margin-top: 20px; }
-        .calc-btn { flex: 2; height: 50px; background-color: #27ae60; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; }
-        .clear-btn { flex: 1; height: 50px; background-color: #e74c3c; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; }
-        
-        .delete-btn { 
-            background: #fceaea; 
-            border: 1px solid #f5c2c2; 
-            color: #e74c3c; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            height: 40px; 
-            min-width: 40px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .result { margin-top: 25px; padding: 20px; background-color: #fff; border: 2px solid #e9ecef; border-radius: 8px; display: none; }
-        .result p { margin: 10px 0; font-size: 16px; display: flex; justify-content: space-between; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
-        .profit-pos { color: #27ae60 !important; font-weight: bold; }
-        .profit-neg { color: #d93025 !important; font-weight: bold; }
+        .header-row { display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #1a73e8; padding: 8px 12px; margin: 20px 0 10px; background: #f8f9fa; border-radius: 0 6px 6px 0; }
+        h3 { font-size: 16px; margin: 0; color: #333; }
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #666; font-weight: 500; }
+        input, select { width: 100%; height: 42px; padding: 0 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; outline: none; }
+        input:focus { border-color: #1a73e8; }
+        .input-group { margin-bottom: 12px; }
+        .custom-field { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        .add-btn { background: #1a73e8; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 20px; font-weight: bold; }
+        .btn-row { display: flex; gap: 10px; margin-top: 25px; }
+        .calc-btn { flex: 2; height: 50px; background: #27ae60; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        .clear-btn { flex: 1; background: #e74c3c; color: white; border: none; border-radius: 8px; cursor: pointer; }
+        .save-btn { width: 100%; height: 45px; background: #34495e; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 10px; font-weight: 500; }
+        .delete-btn { background: #fee2e2; border: 1px solid #fca5a5; color: #dc2626; border-radius: 6px; width: 42px; height: 42px; cursor: pointer; flex-shrink: 0; }
+        .result { margin-top: 25px; padding: 20px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 10px; display: none; }
+        .result p { display: flex; justify-content: space-between; margin: 12px 0; font-size: 15px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 8px; }
+        .res-val { font-weight: 700; color: #1e293b; }
+        .profit-pos { color: #16a34a !important; }
+        .profit-neg { color: #dc2626 !important; }
+        .highlight { background: #fef9c3; padding: 2px 6px; border-radius: 4px; }
+        .highlight-blue { background: #dbeafe; padding: 2px 6px; border-radius: 4px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Бизнес-планировщик</h2>
+    <h2>Бизнес-планировщик v27</h2>
 
     <div class="header-row">
         <h3>1. Единоразовые вложения</h3>
-        <button type="button" class="add-btn" onclick="addNewField('start-fields', 'start-val')">+</button>
+        <button type="button" class="add-btn" onclick="addField('start-fields', 'start-val')">+</button>
     </div>
-    <div id="start-fields" class="section">
-        <div class="input-group">
-            <label>Закупка товара для старта:</label>
-            <input type="number" class="start-val" placeholder="0">
-        </div>
-        <div class="input-group">
-            <label>Оборудование:</label>
-            <input type="number" class="start-val" placeholder="0">
-        </div>
+    <div id="start-fields">
+        <div class="input-group"><label>Закупка товара (старт):</label><input type="number" id="s1" class="start-val store" placeholder="0"></div>
+        <div class="input-group"><label>Оборудование и аренда:</label><input type="number" id="s2" class="start-val store" placeholder="0"></div>
     </div>
 
     <div class="header-row">
         <h3>2. Ежемесячные расходы</h3>
-        <button type="button" class="add-btn" onclick="addNewField('monthly-fields', 'monthly-val')">+</button>
+        <button type="button" class="add-btn" onclick="addField('monthly-fields', 'monthly-val')">+</button>
     </div>
-    <div id="monthly-fields" class="section">
-        <div class="input-group">
-            <label>Аренда:</label>
-            <input type="number" class="monthly-val" placeholder="0">
-        </div>
-        <div class="input-group">
-            <label>Зарплаты:</label>
-            <input type="number" class="monthly-val" placeholder="0">
-        </div>
-        <div class="input-group">
-            <label>Налоги:</label>
-            <input type="number" class="monthly-val" placeholder="0">
-        </div>
-        <div class="input-group">
-            <label>Эл. энергия:</label>
-            <input type="number" class="monthly-val" placeholder="0">
-        </div>
-        <div class="input-group">
-            <label>Реклама:</label>
-            <input type="number" class="monthly-val" placeholder="0">
-        </div>
+    <div id="monthly-fields">
+        <div class="input-group"><label>Аренда (мес):</label><input type="number" id="m1" class="monthly-val store" placeholder="0"></div>
+        <div class="input-group"><label>Зарплаты:</label><input type="number" id="m2" class="monthly-val store" placeholder="0"></div>
     </div>
 
-    <div class="header-row">
-        <h3>3. Продажи</h3>
-    </div>
-    <div class="section" style="display: flex; gap: 10px; padding-top: 10px; align-items: flex-end;">
-        <div style="flex: 2;">
-            <label>Выручка в месяц:</label>
-            <input type="number" id="revenue" placeholder="0">
+    <div class="header-row"><h3>3. Налоги и Продажи</h3></div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="input-group">
+            <label>Налоговая ставка:</label>
+            <select id="t_type" class="store">
+                <option value="0">Без %</option>
+                <option value="6">УСН Доходы 6%</option>
+                <option value="15">УСН Д-Р 15%</option>
+            </select>
         </div>
-        <div style="flex: 1;">
-            <label>Наценка (%):</label>
-            <input type="number" id="markup" value="25">
+        <div class="input-group">
+            <label>Налог вручную (₽):</label>
+            <input type="number" id="t_manual" class="store" placeholder="0">
+        </div>
+        <div class="input-group">
+            <label>Выручка в мес:</label>
+            <input type="number" id="rev" class="store" placeholder="0">
+        </div>
+        <div class="input-group">
+            <label>Наценка %:</label>
+            <input type="number" id="mark" class="store" value="25">
+        </div>
+        <div class="input-group">
+            <label>Рабочих дней:</label>
+            <input type="number" id="days" class="store" value="30">
         </div>
     </div>
 
     <div class="btn-row">
-        <button class="calc-btn" onclick="calculate()">Рассчитать</button>
-        <button class="clear-btn" onclick="clearInputsOnly()">Очистить цифры</button>
+        <button class="calc-btn" onclick="runCalc()">Рассчитать</button>
+        <button class="clear-btn" onclick="resetAll()">Сброс</button>
     </div>
+    <button class="save-btn" onclick="downloadReport()">Скачать отчет (.txt)</button>
 
     <div id="resultBox" class="result">
-        <p>Стартовые вложения: <span id="resTotalInvest">0 ₽</span></p>
-        <p>Вложено в товар (закупка): <span id="resCostPrice">0 ₽</span></p>
-        <p>Валовая прибыль: <span id="resGrossProfit">0 ₽</span></p>
-        <p>Ежемесячные расходы: <span id="resMonthlyOut">0 ₽</span></p>
+        <p>Инвестиции: <span class="res-val" id="out_invest">0 ₽</span></p>
+        <p>Себестоимость закупки: <span class="res-val" id="out_cost">0 ₽</span></p>
+        <p>Итого налоги: <span class="res-val" id="out_tax">0 ₽</span></p>
         <hr>
-        <p><strong>Чистая прибыль:</strong> <span id="resNetProfit">0 ₽</span></p>
-        <p style="border:none; font-size: 18px;"><strong>Окупаемость:</strong> <span id="resPayback">0</span></p>
+        <p>Точка безубыточности (день): <span class="res-val highlight" id="out_bep">0 ₽</span></p>
+        <p>Касса в день (план): <span class="res-val highlight-blue" id="out_rev_day">0 ₽</span></p>
+        <hr>
+        <p>Чистая прибыль (мес): <span id="out_profit" class="res-val">0 ₽</span></p>
+        <p>Окупаемость: <span id="out_payback" class="res-val">---</span></p>
     </div>
 </div>
 
 <script>
-// НОВАЯ УЛЬТРА-СТАБИЛЬНАЯ ФУНКЦИЯ ДОБАВЛЕНИЯ
-function addNewField(containerId, inputClass) {
-    var container = document.getElementById(containerId);
-    var wrapper = document.createElement('div');
-    wrapper.className = 'custom-field dynamic-field';
-    
-    wrapper.innerHTML = `
-        <div class="name-col">
-            <input type="text" placeholder="Название">
-        </div>
-        <div class="amount-col">
-            <input type="number" class="${inputClass}" placeholder="0">
-        </div>
-        <button type="button" class="delete-btn" onclick="this.parentElement.remove()">✕</button>
+// 1. УПРАВЛЕНИЕ ПОЛЯМИ
+function addField(containerId, cssClass, labelText = '', val = '') {
+    const container = document.getElementById(containerId);
+    const div = document.createElement('div');
+    div.className = 'custom-field dyn-field';
+    div.innerHTML = `
+        <input type="text" class="dyn-label" style="flex:7" placeholder="Название" value="${labelText}">
+        <input type="number" class="${cssClass}" style="flex:3" placeholder="0" value="${val}">
+        <button class="delete-btn" onclick="this.parentElement.remove(); autoSave();">✕</button>
     `;
-    
-    container.appendChild(wrapper);
+    container.appendChild(div);
+    div.querySelectorAll('input').forEach(i => i.oninput = autoSave);
 }
 
-function clearInputsOnly() {
-    // Очистка всех числовых полей
-    var sums = document.querySelectorAll('.start-val, .monthly-val');
-    for (var i = 0; i < sums.length; i++) {
-        sums[i].value = '';
-    }
-    
-    // Очистка выручки
-    var rev = document.getElementById('revenue');
-    if (rev) rev.value = '';
-    
-    // Скрытие результатов
-    document.getElementById('resultBox').style.display = 'none';
+// 2. СОХРАНЕНИЕ
+function autoSave() {
+    const data = {
+        fixed: {},
+        dynStart: [],
+        dynMon: []
+    };
+    document.querySelectorAll('.store').forEach(el => data.fixed[el.id] = el.value);
+    document.querySelectorAll('#start-fields .dyn-field').forEach(f => {
+        data.dynStart.push({l: f.querySelector('.dyn-label').value, v: f.querySelector('.start-val').value});
+    });
+    document.querySelectorAll('#monthly-fields .dyn-field').forEach(f => {
+        data.dynMon.push({l: f.querySelector('.dyn-label').value, v: f.querySelector('.monthly-val').value});
+    });
+    localStorage.setItem('biz_data_v27', JSON.stringify(data));
 }
 
-function calculate() {
-    var startSum = 0;
-    var startInputs = document.querySelectorAll('.start-val');
-    for (var i = 0; i < startInputs.length; i++) {
-        startSum += parseFloat(startInputs[i].value) || 0;
+// 3. ЗАГРУЗКА
+window.onload = function() {
+    const saved = localStorage.getItem('biz_data_v27');
+    if (!saved) return;
+    const data = JSON.parse(saved);
+    for (let id in data.fixed) {
+        if (document.getElementById(id)) document.getElementById(id).value = data.fixed[id];
     }
+    data.dynStart.forEach(item => addField('start-fields', 'start-val', item.l, item.v));
+    data.dynMon.forEach(item => addField('monthly-fields', 'monthly-val', item.l, item.v));
+};
 
-    var monthlySum = 0;
-    var monthlyInputs = document.querySelectorAll('.monthly-val');
-    for (var j = 0; j < monthlyInputs.length; j++) {
-        monthlySum += parseFloat(monthlyInputs[j].value) || 0;
-    }
+// 4. РАСЧЕТ
+function runCalc() {
+    autoSave();
+    let invest = 0; document.querySelectorAll('.start-val').forEach(i => invest += +i.value || 0);
+    let expenses = 0; document.querySelectorAll('.monthly-val').forEach(i => expenses += +i.value || 0);
+    
+    const rev = +document.getElementById('rev').value || 0;
+    const mark = +document.getElementById('mark').value || 0;
+    const days = +document.getElementById('days').value || 30;
+    const taxType = document.getElementById('t_type').value;
+    const taxManual = +document.getElementById('t_manual').value || 0;
 
-    var revenue = parseFloat(document.getElementById('revenue').value) || 0;
-    var markupPercent = parseFloat(document.getElementById('markup').value) || 0;
+    const costPrice = rev / (1 + (mark / 100));
+    const grossProfit = rev - costPrice;
     
-    var costPrice = revenue / (1 + (markupPercent / 100));
-    var grossProfit = revenue - costPrice;
-    var netProfit = grossProfit - monthlySum;
+    let taxCalc = 0;
+    if (taxType == "6") taxCalc = rev * 0.06;
+    if (taxType == "15") taxCalc = Math.max(0, (rev - costPrice - expenses) * 0.15);
+    const totalTax = taxCalc + taxManual;
 
-    document.getElementById('resTotalInvest').innerText = Math.round(startSum).toLocaleString() + " ₽";
-    document.getElementById('resCostPrice').innerText = Math.round(costPrice).toLocaleString() + " ₽";
-    document.getElementById('resGrossProfit').innerText = Math.round(grossProfit).toLocaleString() + " ₽";
-    document.getElementById('resMonthlyOut').innerText = Math.round(monthlySum).toLocaleString() + " ₽";
+    const netProfit = grossProfit - expenses - totalTax;
+    const marginRatio = (mark/100) / (1 + (mark/100));
+    const bepDay = marginRatio > 0 ? (expenses + totalTax) / marginRatio / days : 0;
+
+    // Вывод
+    document.getElementById('out_invest').innerText = Math.round(invest).toLocaleString() + " ₽";
+    document.getElementById('out_cost').innerText = Math.round(costPrice).toLocaleString() + " ₽";
+    document.getElementById('out_tax').innerText = Math.round(totalTax).toLocaleString() + " ₽";
+    document.getElementById('out_bep').innerText = Math.round(bepDay).toLocaleString() + " ₽";
+    document.getElementById('out_rev_day').innerText = Math.round(rev / days).toLocaleString() + " ₽";
     
-    var nSpan = document.getElementById('resNetProfit');
-    nSpan.innerText = Math.round(netProfit).toLocaleString() + " ₽/мес.";
-    
-    var pSpan = document.getElementById('resPayback');
-    if (netProfit > 0) {
-        nSpan.className = "profit-pos";
-        pSpan.innerText = (startSum / netProfit).toFixed(1) + " мес.";
-        pSpan.className = "profit-pos";
-    } else {
-        nSpan.className = "profit-neg";
-        pSpan.innerText = "Убыток";
-        pSpan.className = "profit-neg";
-    }
+    const pEl = document.getElementById('out_profit');
+    pEl.innerText = Math.round(netProfit).toLocaleString() + " ₽";
+    pEl.className = netProfit >= 0 ? "res-val profit-pos" : "res-val profit-neg";
+
+    document.getElementById('out_payback').innerText = netProfit > 0 ? (invest / netProfit).toFixed(1) + " мес." : "---";
     document.getElementById('resultBox').style.display = 'block';
 }
+
+function resetAll() {
+    if(confirm('Сбросить все данные?')) { localStorage.removeItem('biz_data_v27'); location.reload(); }
+}
+
+function downloadReport() {
+    runCalc();
+    const t = `ОТЧЕТ БИЗНЕС-ПЛАНА\n` +
+            `Закупка (себестоимость): ${document.getElementById('out_cost').innerText}\n` +
+            `Точка безубыточности (день): ${document.getElementById('out_bep').innerText}\n` +
+            `Касса план (день): ${document.getElementById('out_rev_day').innerText}\n` +
+            `Чистая прибыль: ${document.getElementById('out_profit').innerText}\n` +
+            `Окупаемость: ${document.getElementById('out_payback').innerText}`;
+    const blob = new Blob([t], {type: 'text/plain'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'business_plan.txt';
+    a.click();
+}
+
+// Привязка автосохранения к базовым полям
+document.querySelectorAll('.store').forEach(el => el.oninput = autoSave);
 </script>
 
 </body>
